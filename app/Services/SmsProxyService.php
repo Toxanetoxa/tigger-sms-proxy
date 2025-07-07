@@ -8,12 +8,11 @@ use Illuminate\Support\Facades\Http;
 class SmsProxyService
 {
     protected string $baseUrl;
-    protected string $token;
 
     public function __construct()
     {
         $this->baseUrl = config('services.sms_api.url');
-        $this->token = config('services.sms_api.token');
+//        $this->token = config('services.sms_api.token');
     }
 
     /**
@@ -23,7 +22,7 @@ class SmsProxyService
     {
         $query = array_merge([
             'action' => $action,
-            'token' => $this->token,
+            'token' => $params['token'],
         ], $params);
 
         $response = Http::get($this->baseUrl, $query);
@@ -44,81 +43,56 @@ class SmsProxyService
     /**
      * @throws Exception
      */
-    public function getNumber(string $country, string $service, ?int $rentTime = null): array
+    public function getNumber(string $token, string $action, string $country, string $service, ?int $rentTime = null): array
     {
-//        $params = [
-//            'country' => $country,
-//            'service' => $service,
-//        ];
-//
-//        if ($rentTime !== null) {
-//            $params['rent_time'] = $rentTime;
-//        }
-//
-//        $data = $this->request('getNumber', $params);
-
-        // TODO удалить тестовые данные
-        return [
-            'code' => 'ok',
-            'number' => '18181818181',
-            'activation' => '123456',
-            'cost' => 0.01,
-//            'data' => $data,
+        $params = [
+            'country' => $country,
+            'service' => $service,
+            'token' => $token,
         ];
+
+        if ($rentTime !== null) {
+            $params['rent_time'] = $rentTime;
+        }
+
+        return $this->request($action, $params);
     }
 
     /**
      * @throws Exception
      */
-    public function getSms(string $activation): array
+    public function getSms(string $token, string $action, string $activation): array
     {
-//        $data = $this->request('getSms', [
-//            'activation' => $activation,
-//        ]);
-
-        // TODO удалить тестовые данные
-        return [
-            'code' => 'ok',
-            'sms' => '12345',
-//            'data' => $data,
+        $params = [
+            'activation' => $activation,
+            'token' => $token,
         ];
+
+        return $this->request($action, $params);
     }
 
     /**
      * @throws Exception
      */
-    public function cancelNumber(string $activation): array
+    public function cancelNumber(string $token, string $action, string $activation): array
     {
-//        $data = $this->request('cancelNumber', [
-//            'activation' => $activation,
-//        ]);
-
-        // TODO удалить тестовые данные
-        return [
-            "code" => "ok",
-            "activation" => "10869836",
-            "status" => "canceled",
-//            "data" => $data,
+        $params = [
+            'activation' => $activation,
+            'token' => $token,
         ];
+        return $this->request($action, $params);
     }
 
     /**
      * @throws Exception
      */
-    public function getStatus(string $activation): array
+    public function getStatus(string $token, string $action, string $activation): array
     {
-//        $data = $this->request('getStatus', [
-//            'activation' => $activation,
-//        ]);
-
-        // TODO удалить тестовые данные
-        return [
-            "code" => "ok",
-            "status" => "",
-            "count_sms" => 4,
-            "end_rent_date" => "2022-10-04 13:09:05",
-//            "data" => $data,
+        $params = [
+            'activation' => $activation,
+            'token' => $token,
         ];
+        return $this->request($action, $params);
     }
 
 }

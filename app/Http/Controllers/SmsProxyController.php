@@ -13,9 +13,11 @@ class SmsProxyController extends Controller
      */
     public function getNumber(Request $request, SmsProxyService $smsProxy): \Illuminate\Http\JsonResponse
     {
+        $token = $request->query('token');
         $country = $request->query('country');
         $service = $request->query('service');
         $rentTime = $request->query('rent_time');
+        $action = $request->query('action');
 
         if (!$country || !$service) {
             return response()->json([
@@ -24,7 +26,7 @@ class SmsProxyController extends Controller
             ], 400);
         }
 
-        $data = $smsProxy->getNumber($country, $service, $rentTime);
+        $data = $smsProxy->getNumber($token, $action, $country, $service, $rentTime);
 
         return response()->json($data);
     }
@@ -37,6 +39,8 @@ class SmsProxyController extends Controller
         SmsProxyService $smsProxy
     ): \Illuminate\Http\JsonResponse {
         $activation = $request->query('activation');
+        $token = $request->query('token');
+        $action = $request->query('action');
 
         if (!$activation) {
             return response()->json([
@@ -45,7 +49,7 @@ class SmsProxyController extends Controller
             ], 400);
         }
 
-        $data = $smsProxy->getSms($activation);
+        $data = $smsProxy->getSms($token, $action, $activation);
 
         return response()->json($data);
     }
@@ -57,6 +61,8 @@ class SmsProxyController extends Controller
         Request $request,
         SmsProxyService $smsProxy
     ): \Illuminate\Http\JsonResponse {
+        $token = $request->query('token');
+        $action = $request->query('action');
         $activation = $request->query('activation');
 
         if (!$activation) {
@@ -66,7 +72,7 @@ class SmsProxyController extends Controller
             ], 400);
         }
 
-        $data = $smsProxy->cancelNumber($activation);
+        $data = $smsProxy->cancelNumber($token, $action, $activation);
 
         return response()->json($data);
     }
@@ -79,6 +85,8 @@ class SmsProxyController extends Controller
         SmsProxyService $smsProxy
     ): \Illuminate\Http\JsonResponse {
         $activation = $request->query('activation');
+        $token = $request->query('token');
+        $action = $request->query('action');
 
         if (!$activation) {
             return response()->json([
@@ -87,7 +95,7 @@ class SmsProxyController extends Controller
             ], 400);
         }
 
-        $data = $smsProxy->cancelNumber($activation);
+        $data = $smsProxy->cancelNumber($token, $action, $activation);
 
         return response()->json($data);
     }

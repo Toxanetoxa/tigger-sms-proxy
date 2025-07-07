@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.3-cli
 
 # Установка зависимостей
 RUN apt-get update && apt-get install -y \
@@ -23,6 +23,8 @@ WORKDIR /var/www
 
 # Копирование файлов
 COPY . .
+
+RUN apt-get update && apt-get install -y openssl ca-certificates
 
 # Установка зависимостей Laravel
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
